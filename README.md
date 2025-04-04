@@ -90,6 +90,14 @@ This project uses the Next.js App Router and follows the recommended project str
 
 The project uses PostgreSQL for data storage. The database integration is in the `src/lib/db` directory. See the [Database README](src/lib/db/README.md) for more details.
 
+### API Endpoints
+
+The project includes the following API endpoints:
+
+- **Health Check**: `GET /api/health` - Returns the health status of the application
+  - Response: `{ status: "ok", timestamp: "ISO date string", version: "semver string" }`
+  - Status Code: 200 OK when healthy, 500 Internal Server Error when unhealthy
+
 ### Logging
 
 The project uses Winston for logging. The logger configuration is in `src/lib/logger.ts`.
