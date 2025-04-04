@@ -22,7 +22,23 @@
     "db:migrate:down": "cross-env NODE_ENV=development node-pg-migrate down",
     "db:migrate:create": "node-pg-migrate create",
     "db:migrate:test": "cross-env NODE_ENV=test node-pg-migrate up",
-    "db:reset": "cross-env NODE_ENV=development node-pg-migrate down --count=999 && cross-env NODE_ENV=development node-pg-migrate up"
+    "db:reset": "cross-env NODE_ENV=development node-pg-migrate down --count=999 && cross-env NODE_ENV=development node-pg-migrate up",
+    "commit": "cz",
+    "prepare": "husky"
+  },
+  "config": {
+    "commitizen": {
+      "path": "@commitlint/cz-commitlint"
+    }
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,css,md}": [
+      "prettier --write"
+    ]
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.1.2",
@@ -30,8 +46,10 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cross-env": "^7.0.3",
+    "date-fns": "^4.1.0",
     "lucide-react": "^0.487.0",
     "next": "^15.0.0",
+    "next-intl": "^4.0.2",
     "node-pg-migrate": "^7.9.1",
     "pg": "^8.14.1",
     "react": "^19.0.0",
@@ -41,15 +59,21 @@
     "winston": "^3.17.0"
   },
   "devDependencies": {
+    "@commitlint/cli": "^19.8.0",
+    "@commitlint/config-conventional": "^19.8.0",
+    "@commitlint/cz-commitlint": "^19.8.0",
     "@eslint/eslintrc": "^3.0.0",
     "@playwright/test": "^1.51.1",
     "@tailwindcss/postcss": "^4.0.0",
     "@types/node": "^22.0.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
+    "commitizen": "^4.3.1",
     "eslint": "^9.0.0",
     "eslint-config-next": "^15.0.0",
     "eslint-config-prettier": "^10.1.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.0",
     "prettier": "^3.5.3",
     "shadcn": "^2.4.0-canary.17",
     "tailwindcss": "^4.0.0",

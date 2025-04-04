@@ -1,38 +1,23 @@
-import { NextRequest, NextResponse } from 'next/server';
-import logger from './lib/logger';
+import createMiddleware from 'next-intl/middleware';
+import { locales, defaultLocale } from './lib/i18n';
 
-export function middleware(request: NextRequest) {
-  const start = Date.now();
-  const requestId = crypto.randomUUID();
-  
-  // Log the request
-  logger.http(
-    `[${requestId}] ${request.method} ${request.nextUrl.pathname} - Request received`
-  );
+export default createMiddleware({
+  // A list of all locales that are supported
+  locales,
 
-  // Continue with the request
-  const response = NextResponse.next();
+  // If this locale is matched, pathnames work without a prefix (e.g. `/about`)
+  defaultLocale,
 
-  // Calculate duration
-  const duration = Date.now() - start;
-  
-  // Log the response (note: this doesn't include actual response time, just middleware processing time)
-  logger.http(
-    `[${requestId}] ${request.method} ${request.nextUrl.pathname} - Request processed in ${duration}ms`
-  );
+  // Domains can be used to configure different locales for different domains
+  // domains: [
+  //   {
+  //     domain: 'example.com',
+  //     defaultLocale: 'en'
+  //   }
+  // ]
+});
 
-  return response;
-}
-
-// Configure which paths the middleware runs on
 export const config = {
-  matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     */
-    '/((?!_next/static|_next/image|favicon.ico).*)',
-  ],
+  // Skip all paths that should not be internationalized
+  matcher: ['/((?!api|_next|.*\\..*).*)'],
 };

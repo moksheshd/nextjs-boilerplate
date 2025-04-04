@@ -12,6 +12,11 @@ This is a Next.js project bootstrapped with [`create-next-app`](https://nextjs.o
 - **PostgreSQL**: Database
 - **Winston**: Logging
 - **Playwright**: Testing
+- **date-fns**: Date utility library
+- **commitizen**: Standardized commit messages
+- **husky**: Git hooks
+- **lint-staged**: Run linters on staged files
+- **next-intl**: Internationalization
 
 ## Getting Started
 
@@ -33,6 +38,7 @@ npm install
 1. Make sure PostgreSQL is installed and running on your system.
 
 2. Create a `.env` file in the root directory with the following variables (you can copy from `.env.example`):
+
    ```
    PGHOST=localhost
    PGPORT=5432
@@ -42,6 +48,7 @@ npm install
    ```
 
 3. Create a PostgreSQL database:
+
    ```bash
    createdb nextjs_boilerplate_dev
    ```
@@ -91,6 +98,22 @@ The project uses Winston for logging. The logger configuration is in `src/lib/lo
 
 The project uses Playwright for testing. The test files are in the `tests` directory.
 
+### Date Utilities
+
+The project uses date-fns for date manipulation and formatting. The date utility functions are in `src/lib/utils/date.ts`. See the [Date Utilities README](src/lib/utils/README-date.md) for more details.
+
+### Internationalization
+
+The project uses next-intl for internationalization. The internationalization configuration is in `src/lib/i18n.ts`. Translation files are in the `src/messages` directory.
+
+### Git Workflow
+
+The project uses several tools to improve the Git workflow:
+
+- **commitizen**: Standardized commit messages following the Conventional Commits format
+- **husky**: Git hooks to run scripts before commits, pushes, etc.
+- **lint-staged**: Run linters only on staged files
+
 ## Available Scripts
 
 - `npm run dev`: Run the development server
@@ -106,3 +129,4 @@ The project uses Playwright for testing. The test files are in the `tests` direc
 - `npm run db:migrate:down`: Undo database migrations
 - `npm run db:migrate:create`: Create a new migration
 - `npm run db:reset`: Reset the database
+- `npm run commit`: Create a standardized commit message using commitizen
