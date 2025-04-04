@@ -38,7 +38,8 @@ const environments = {
 const env = process.env.NODE_ENV || 'development';
 
 // Select the appropriate configuration
-const config: PoolConfig = environments[env as keyof typeof environments] || environments.development;
+const config: PoolConfig =
+  environments[env as keyof typeof environments] || environments.development;
 
 // Create a new pool using the configuration
 const pool = new Pool(config);
@@ -55,7 +56,7 @@ pool.on('error', (err: Error) => {
  * @param params The query parameters
  * @returns The query result
  */
-export async function query<T>(text: string, params?: any[]): Promise<T[]> {
+export async function query<T>(text: string, params?: unknown[]): Promise<T[]> {
   const client = await pool.connect();
   try {
     const result = await client.query(text, params);
@@ -70,9 +71,7 @@ export async function query<T>(text: string, params?: any[]): Promise<T[]> {
  * @param callback A function that receives a client and executes queries
  * @returns The result of the callback function
  */
-export async function transaction<T>(
-  callback: (client: PoolClient) => Promise<T>
-): Promise<T> {
+export async function transaction<T>(callback: (client: PoolClient) => Promise<T>): Promise<T> {
   const client = await pool.connect();
   try {
     await client.query('BEGIN');

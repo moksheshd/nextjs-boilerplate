@@ -11,17 +11,17 @@ const dbLogger = logger.child({ module: 'database' });
  * @param params The query parameters
  * @returns The query result
  */
-export async function executeQuery<T>(text: string, params?: any[]): Promise<T[]> {
+export async function executeQuery<T>(text: string, params?: unknown[]): Promise<T[]> {
   try {
     dbLogger.debug(`Executing query: ${text}`);
     if (params) {
       dbLogger.debug(`Query parameters: ${JSON.stringify(params)}`);
     }
-    
+
     const startTime = Date.now();
     const result = await query<T>(text, params);
     const duration = Date.now() - startTime;
-    
+
     dbLogger.debug(`Query completed in ${duration}ms, returned ${result.length} rows`);
     return result;
   } catch (error) {
@@ -41,12 +41,12 @@ export async function executeTransaction<T>(
   try {
     dbLogger.debug('Starting transaction');
     const startTime = Date.now();
-    
+
     const result = await transaction(callback);
-    
+
     const duration = Date.now() - startTime;
     dbLogger.debug(`Transaction completed in ${duration}ms`);
-    
+
     return result;
   } catch (error) {
     dbLogger.error(`Transaction error: ${error instanceof Error ? error.message : String(error)}`);
@@ -65,7 +65,9 @@ export async function checkConnection(): Promise<boolean> {
     await client.query('SELECT 1');
     return true;
   } catch (error) {
-    dbLogger.error(`Connection check failed: ${error instanceof Error ? error.message : String(error)}`);
+    dbLogger.error(
+      `Connection check failed: ${error instanceof Error ? error.message : String(error)}`
+    );
     return false;
   } finally {
     if (client) {
@@ -84,7 +86,9 @@ export async function closeConnections(): Promise<void> {
     await pool.end();
     dbLogger.info('All database connections closed');
   } catch (error) {
-    dbLogger.error(`Error closing connections: ${error instanceof Error ? error.message : String(error)}`);
+    dbLogger.error(
+      `Error closing connections: ${error instanceof Error ? error.message : String(error)}`
+    );
     throw error;
   }
 }
@@ -104,7 +108,9 @@ export async function createTableIfNotExists(tableName: string, schema: string):
     `);
     dbLogger.info(`Table ${tableName} is ready`);
   } catch (error) {
-    dbLogger.error(`Error creating table ${tableName}: ${error instanceof Error ? error.message : String(error)}`);
+    dbLogger.error(
+      `Error creating table ${tableName}: ${error instanceof Error ? error.message : String(error)}`
+    );
     throw error;
   }
 }

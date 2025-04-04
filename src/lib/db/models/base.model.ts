@@ -24,7 +24,7 @@ export abstract class BaseModel<T> {
   async findAll(limit?: number, offset?: number): Promise<T[]> {
     try {
       let query = `SELECT * FROM ${this.tableName}`;
-      const params: any[] = [];
+      const params: unknown[] = [];
 
       if (limit !== undefined) {
         query += ' LIMIT $1';
@@ -38,7 +38,9 @@ export abstract class BaseModel<T> {
 
       return await executeQuery<T>(query, params.length > 0 ? params : undefined);
     } catch (error) {
-      modelLogger.error(`Error in findAll for ${this.tableName}: ${error instanceof Error ? error.message : String(error)}`);
+      modelLogger.error(
+        `Error in findAll for ${this.tableName}: ${error instanceof Error ? error.message : String(error)}`
+      );
       throw error;
     }
   }
@@ -54,7 +56,9 @@ export abstract class BaseModel<T> {
       const result = await executeQuery<T>(query, [id]);
       return result.length > 0 ? result[0] : null;
     } catch (error) {
-      modelLogger.error(`Error in findById for ${this.tableName}: ${error instanceof Error ? error.message : String(error)}`);
+      modelLogger.error(
+        `Error in findById for ${this.tableName}: ${error instanceof Error ? error.message : String(error)}`
+      );
       throw error;
     }
   }
@@ -65,12 +69,14 @@ export abstract class BaseModel<T> {
    * @param value The field value
    * @returns Array of matching records
    */
-  async findByField(field: string, value: any): Promise<T[]> {
+  async findByField(field: string, value: unknown): Promise<T[]> {
     try {
       const query = `SELECT * FROM ${this.tableName} WHERE ${field} = $1`;
       return await executeQuery<T>(query, [value]);
     } catch (error) {
-      modelLogger.error(`Error in findByField for ${this.tableName}: ${error instanceof Error ? error.message : String(error)}`);
+      modelLogger.error(
+        `Error in findByField for ${this.tableName}: ${error instanceof Error ? error.message : String(error)}`
+      );
       throw error;
     }
   }
@@ -85,17 +91,19 @@ export abstract class BaseModel<T> {
       const fields = Object.keys(data);
       const values = Object.values(data);
       const placeholders = fields.map((_, i) => `$${i + 1}`).join(', ');
-      
+
       const query = `
         INSERT INTO ${this.tableName} (${fields.join(', ')})
         VALUES (${placeholders})
         RETURNING *
       `;
-      
+
       const result = await executeQuery<T>(query, values);
       return result[0];
     } catch (error) {
-      modelLogger.error(`Error in create for ${this.tableName}: ${error instanceof Error ? error.message : String(error)}`);
+      modelLogger.error(
+        `Error in create for ${this.tableName}: ${error instanceof Error ? error.message : String(error)}`
+      );
       throw error;
     }
   }
@@ -110,20 +118,22 @@ export abstract class BaseModel<T> {
     try {
       const fields = Object.keys(data);
       const values = Object.values(data);
-      
+
       const setClause = fields.map((field, i) => `${field} = $${i + 1}`).join(', ');
-      
+
       const query = `
         UPDATE ${this.tableName}
         SET ${setClause}
         WHERE id = $${fields.length + 1}
         RETURNING *
       `;
-      
+
       const result = await executeQuery<T>(query, [...values, id]);
       return result.length > 0 ? result[0] : null;
     } catch (error) {
-      modelLogger.error(`Error in update for ${this.tableName}: ${error instanceof Error ? error.message : String(error)}`);
+      modelLogger.error(
+        `Error in update for ${this.tableName}: ${error instanceof Error ? error.message : String(error)}`
+      );
       throw error;
     }
   }
@@ -139,7 +149,9 @@ export abstract class BaseModel<T> {
       const result = await executeQuery<{ id: string | number }>(query, [id]);
       return result.length > 0;
     } catch (error) {
-      modelLogger.error(`Error in delete for ${this.tableName}: ${error instanceof Error ? error.message : String(error)}`);
+      modelLogger.error(
+        `Error in delete for ${this.tableName}: ${error instanceof Error ? error.message : String(error)}`
+      );
       throw error;
     }
   }
@@ -150,18 +162,20 @@ export abstract class BaseModel<T> {
    * @param params Optional parameters for the WHERE clause
    * @returns The number of records
    */
-  async count(whereClause?: string, params?: any[]): Promise<number> {
+  async count(whereClause?: string, params?: unknown[]): Promise<number> {
     try {
       let query = `SELECT COUNT(*) as count FROM ${this.tableName}`;
-      
+
       if (whereClause) {
         query += ` WHERE ${whereClause}`;
       }
-      
+
       const result = await executeQuery<{ count: string }>(query, params);
       return parseInt(result[0].count, 10);
     } catch (error) {
-      modelLogger.error(`Error in count for ${this.tableName}: ${error instanceof Error ? error.message : String(error)}`);
+      modelLogger.error(
+        `Error in count for ${this.tableName}: ${error instanceof Error ? error.message : String(error)}`
+      );
       throw error;
     }
   }
@@ -172,11 +186,13 @@ export abstract class BaseModel<T> {
    * @param params The query parameters
    * @returns The query result
    */
-  async executeCustomQuery<R>(query: string, params?: any[]): Promise<R[]> {
+  async executeCustomQuery<R>(query: string, params?: unknown[]): Promise<R[]> {
     try {
       return await executeQuery<R>(query, params);
     } catch (error) {
-      modelLogger.error(`Error in executeCustomQuery for ${this.tableName}: ${error instanceof Error ? error.message : String(error)}`);
+      modelLogger.error(
+        `Error in executeCustomQuery for ${this.tableName}: ${error instanceof Error ? error.message : String(error)}`
+      );
       throw error;
     }
   }
@@ -190,7 +206,9 @@ export abstract class BaseModel<T> {
     try {
       return await executeTransaction(callback);
     } catch (error) {
-      modelLogger.error(`Error in executeTransaction for ${this.tableName}: ${error instanceof Error ? error.message : String(error)}`);
+      modelLogger.error(
+        `Error in executeTransaction for ${this.tableName}: ${error instanceof Error ? error.message : String(error)}`
+      );
       throw error;
     }
   }

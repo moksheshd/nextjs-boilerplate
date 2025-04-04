@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { notFound } from 'next/navigation';
 import { NextIntlClientProvider } from 'next-intl';
-import { getMessages, locales } from '@/lib/i18n';
+import { getMessages, locales, Locale } from '@/lib/i18n';
 import '../globals.css';
 
 const geistSans = Geist({
@@ -18,30 +18,31 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: 'Next.js Boilerplate',
-  description: 'A modern, feature-rich starter template for building scalable web applications with Next.js',
+  description:
+    'A modern, feature-rich starter template for building scalable web applications with Next.js',
 };
 
 export function generateStaticParams() {
-  return locales.map((locale) => ({ locale }));
+  return locales.map(locale => ({ locale }));
 }
 
 export default async function LocaleLayout({
   children,
-  params
+  params,
 }: {
   children: React.ReactNode;
   params: { locale: string };
 }) {
   // Unwrap params using await
   const { locale } = params;
-  
+
   // Validate that the incoming `locale` parameter is valid
-  if (!locales.includes(locale as any)) {
+  if (!locales.includes(locale as Locale)) {
     notFound();
   }
 
   // Load messages for the current locale
-  const messages = await getMessages(locale as any);
+  const messages = await getMessages(locale as Locale);
 
   return (
     <html lang={locale}>
