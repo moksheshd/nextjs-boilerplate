@@ -7,5 +7,7 @@ export const defaultLocale = 'en' as const;
 
 // Helper function to load messages for a specific locale
 export async function getMessages(locale: Locale) {
-  return (await import(`../messages/${locale}/index.json`)).default;
+  return {
+    boilerplate: (await import(`../messages/${locale}/boilerplate.json`)).default
+  };
 }

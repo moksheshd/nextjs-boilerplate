@@ -1,10 +1,9 @@
 import createNextIntlPlugin from 'next-intl/plugin';
-import type { NextConfig } from 'next';
 
 const withNextIntl = createNextIntlPlugin();
 
-// Define the base Next.js configuration
-const nextConfig: NextConfig = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   // Add any other Next.js configuration options here
 };
 
